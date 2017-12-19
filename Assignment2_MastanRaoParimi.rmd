@@ -1,0 +1,51 @@
+---
+title: "EDA_Assignment2"
+author: "Mastan Rao Parimi"
+date: "10 September 2017"
+output: html_document
+---
+#1)	Load the dataset early_senate_polls.csv file.
+```{r, Q1}
+dt <- read.csv(file = "D:/T-1/EDA/Assignment2_MAGE_MastanRaoParimi/2A/early-senate-polls.csv")
+View(dt)
+```
+#2)	Find the number of rows and columns in the dataset
+```{r, Q2}
+a <- nrow(dt)
+b <- ncol(dt)
+cat("number of row =",a)
+cat("\nnumber of columns =",b)
+```
+#3)	Check the class type of each column
+```{r, Q3}
+str(dt)
+```
+#4)	Use the dplyr package and
+```{r, Q4}
+require(dplyr)
+```
+#5)	For each year, calculate the average of presidential_approval
+```{r, Q5}
+dt %>% group_by(year) %>% summarise(avg_delay=mean(presidential_approval,na.rm=TRUE))
+```
+#6)	Show only the rows where the average presidential_approval obtained in the above step is greater than 100.
+```{r, Q6}
+dt %>% group_by(year) %>% summarise(avg_delay=mean(presidential_approval,na.rm=TRUE)) %>% filter(avg_delay>100)
+```
+#7)	Use the dplyr package to select the 
+  a.	columns year and poll_average
+  b.	For each year, find the maximum value of poll_average
+```{r, Q7}
+dt %>% select(year,poll_average) %>% group_by(year) %>% summarise(max_poll_avg=max(poll_average))
+```
+#8)	select year and election_result and arrange the results in order(ascending) of      election_result 
+```{r, Q8}
+dt %>% select(year,election_result) %>% arrange(election_result)
+```
+#9)	Use the dplyr package to select
+    a.	Year and poll_average for each year
+    b.	Retrieve the maximum value of poll_average and store it in a new variable       max_poll_aver.
+```{r, Q9}
+max_poll_aver <- dt %>% select(year,poll_average) %>% group_by(year) %>% summarise(max_poll_avg=max(poll_average))
+max_poll_aver
+```

@@ -1,0 +1,284 @@
+---
+title: "HACKTHON 1.0"
+author: "BY GROUP1"
+date: "22 September 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+#1.	Summary Analysis describing the number of 
+#a.	Columns
+#b.	rows 
+#c.	names of different columns
+#d.	The class types of the columns
+
+#read.csv used to read the .csv file from system.
+Employeedetails<-read.csv("D:/EDA/Problem4_EmployeeAtrition/DataSet-HR-Employee-Attritions.csv")
+
+#No Of columns and rows in a dataset
+ncols=ncol(Employeedetails)
+cat("No of Columns in dataset=",ncols,"\n")
+
+nrows=nrow(Employeedetails)
+cat("No of rows in dataset=",nrows,"\n")
+
+#class types of the columns in dataset
+str(Employeedetails)
+
+summary(Employeedetails)
+
+```
+
+```{r}
+#2.Check the Data Quality of the data. If you realize there are null values in it, use Data Imputation for filling the data. Justify the methodology you follow for Data Imputaion. 
+library(Hmisc)
+i=1
+while(i<=ncol(Employeedetails))
+{
+  if(class(Employeedetails)=="int"){
+Employeedetails[,i][is.na(Employeedetails[,i])]<-median(Employeedetails[,i],na.rm = TRUE)
+  }else{
+    
+Employeedetails[,i]<-with(Employeedetails,impute(Employeedetails[,i],'random'))
+  }
+i=i+1
+}
+
+```
+```{r}
+#3.Do Univariate Analysis of all the variables present
+#bar graph of Gender
+
+summary(Employeedetails$Gender)
+Female <- subset(Employeedetails,Employeedetails$Gender == "Female")
+male <- subset(Employeedetails,Employeedetails$Gender == "Male")
+Femalel <- nrow(Female)
+malel <- nrow(male)
+slices = c(Femalel,malel)
+lbls <- c("Female","male")
+xx = barplot(slices, ylab="No of Employees ",col= "blue",border = "black",main = "Gender  of Employees ")
+text(x = xx, y = slices,label = slices, pos = 3, cex = 0.8, col = "red")
+axis(1, at=xx, label=lbls, tick=FALSE, las=3, line=-0.5, cex.axis=0.9)
+
+# bargraph of MaritalStatus
+summary(Employeedetails$MaritalStatus)
+Married <- subset(Employeedetails,Employeedetails$MaritalStatus == "Married")
+Single <- subset(Employeedetails,Employeedetails$MaritalStatus == "Single")
+Divorced <- subset(Employeedetails,Employeedetails$MaritalStatus == "Divorced")
+Marriedl <- nrow(Married)
+Singlel <- nrow(Single)
+Divorcedl <- nrow(Divorced)
+slices = c(Marriedl,Singlel,Divorcedl)
+lbls <- c("Married","Single","Divorcedl ")
+xx = barplot(slices, ylab="No of Employees ",col= "blue",border = "black",main = "MaritalStatus  of Employees ")
+text(x = xx, y = slices,label = slices, pos = 3, cex = 0.8, col = "red")
+axis(1, at=xx, label=lbls, tick=FALSE, las=3, line=-0.5, cex.axis=0.9)
+
+#bar graph of Attrition
+Attritionyes <- subset(Employeedetails , Employeedetails$Attrition == "Yes")
+AttritionNO <- subset(Employeedetails ,  Employeedetails$Attrition == "No")
+Attritionyesl <- nrow(Attritionyes)
+AttritionNOl <- nrow(AttritionNO)
+slices = c(Attritionyesl,AttritionNOl)
+lbls <- c("Attritionyes","AttritionNO")
+xx = barplot(slices, ylab="No of Employees ",col= "blue",border = "black",main = "Attrition of Employees ")
+text(x = xx, y = slices,label = slices, pos = 3, cex = 0.8, col = "red")
+axis(1, at=xx, label=lbls, tick=FALSE, las=3, line=-0.5, cex.axis=0.9)
+
+summary(Employeedetails$OverTime)
+Yes <- subset(Employeedetails,Employeedetails$OverTime == "Yes")
+No <- subset(Employeedetails,Employeedetails$OverTime == "No")
+Yesl <- nrow(Yes)
+Nol <- nrow(No)
+slices = c(Yesl,Nol)
+lbls <- c("Yes","No")
+xx = barplot(slices, ylab="No of employee ",col= "blue",border = "black",main = "OverTime  of Employees ")
+text(x = xx, y = slices,label = slices, pos = 3, cex = 0.8, col = "red")
+axis(1, at=xx, label=lbls, tick=FALSE, las=1, line=-0.1, cex.axis=0.9)
+
+hist(Employeedetails$Age ,main="Age of empolyee", xlab="No of people", 
+     border="red",col="blue")
+
+hist(Employeedetails$DailyRate ,main="Daily rate of empolyee", xlab="No of people", 
+     border="green",col="red")
+
+hist(Employeedetails$DistanceFromHome ,main="DistanceFromHome of empolyee", xlab="No of people", 
+     border="aquamarine",col="yellow")
+
+hist(Employeedetails$Education ,main="Education of empolyee", xlab="No of people", 
+     border="darkmagenta",col="aquamarine")
+
+hist(Employeedetails$EmployeeCount ,main="Employee Count", xlab="No of people", 
+     border="darkmagenta",col="green")
+
+hist(Employeedetails$EmployeeNumber ,main="EmployeeNumber", xlab="No of people", 
+     border="darkmagenta",col="dodgerblue")
+
+hist(Employeedetails$EnvironmentSatisfaction ,main="EnvironmentSatisfaction of empolyee", xlab="No of people", 
+     border="green2",col="gold")
+
+hist(Employeedetails$HourlyRate ,main="HourlyRate of empolyee", xlab="No of people", 
+     border="darkmagenta",col="deeppink2")
+
+hist(Employeedetails$JobInvolvement ,main="JobInvolvement of empolyee", xlab="No of people", 
+     border="green2",col="khaki1")
+
+hist(Employeedetails$JobLevel ,main="JobLevel of empolyee", xlab="No of people", 
+     border="darkmagenta",col="hotpink")
+
+hist(Employeedetails$JobSatisfaction ,main="JobSatisfaction of empolyee", xlab="No of people", 
+     border="darkmagenta",col="lightgoldenrod")
+
+hist(Employeedetails$MonthlyIncome ,main="MonthlyIncome of empolyee", xlab="No of people", 
+     border="darkmagenta",col="orangered")
+
+hist(Employeedetails$MonthlyRate ,main="MonthlyRate of empolyee", xlab="No of people", 
+     border="darkmagenta",col="palegreen")
+
+
+hist(Employeedetails$NumCompaniesWorked ,main="NumCompaniesWorked of empolyee", xlab="No of people", 
+     border="darkmagenta",col="seagreen1")
+
+
+hist(Employeedetails$PercentSalaryHike ,main="PercentSalaryHike of empolyee", xlab="No of people", 
+     border="darkmagenta",col="tan3")
+
+hist(Employeedetails$RelationshipSatisfaction ,main="RelationshipSatisfaction of empolyee", xlab="No of people", 
+     border="red",col="blue")
+
+hist(Employeedetails$StandardHours ,main="StandardHours of empolyee", xlab="No of people", 
+     border="green",col="red")
+
+hist(Employeedetails$StockOptionLevel ,main="StockOptionLevel of empolyee", xlab="No of people", 
+     border="aquamarine",col="yellow")
+
+hist(Employeedetails$TotalWorkingYears ,main="TotalWorkingYears of empolyee", xlab="No of people", 
+     border="darkmagenta",col="aquamarine")
+
+hist(Employeedetails$TrainingTimesLastYear ,main="TrainingTimesLastYear of Employee", xlab="No of people", 
+     border="darkmagenta",col="green")
+
+hist(Employeedetails$WorkLifeBalance ,main="WorkLifeBalance", xlab="No of people", 
+     border="darkmagenta",col="dodgerblue")
+
+hist(Employeedetails$YearsAtCompany ,main="EnvironmentSatisfaction of empolyee", xlab="No of people", 
+     border="green2",col="gold")
+
+hist(Employeedetails$YearsInCurrentRole ,main="YearsInCurrentRole of empolyee", xlab="No of people", 
+     border="darkmagenta",col="deeppink2")
+
+hist(Employeedetails$YearsSinceLastPromotion ,main="YearsSinceLastPromotion of empolyee", xlab="No of people", 
+     border="green2",col="khaki1")
+
+hist(Employeedetails$YearsWithCurrManager ,main="YearsWithCurrManager of empolyee", xlab="No of people", 
+     border="darkmagenta",col="hotpink")
+```
+```{r}
+#4.The target variable in this dataset is the attribute "Attrition" Do a bivariate analysis of this variable with all the other attributes. Also give your inferences from the graph generated.
+plot(Employeedetails$Attrition,Employeedetails$Age , main = "Impact of age on Attrition", col="lightgoldenrod")
+plot(Employeedetails$Attrition,Employeedetails$BusinessTravel,main = "Impact of BusinessTravel on Attrition",  col="khaki1")
+plot(Employeedetails$Attrition,Employeedetails$DailyRate , main = "Impact of DailyRate on Attrition",col="green")
+plot(Employeedetails$Attrition,Employeedetails$Department , main = "Impact of Department on Attrition",col="red")
+plot(Employeedetails$Attrition,Employeedetails$DistanceFromHome ,main = "Impact of DistanceFromHome on Attrition", col="yellow")
+plot(Employeedetails$Attrition,Employeedetails$Education , main = "Impact of Education on Attrition",col="lightgoldenrod")
+plot(Employeedetails$Attrition,Employeedetails$EducationField ,main = "Impact of BusinessTravel on Attrition", col="hotpink")
+plot(Employeedetails$Attrition,Employeedetails$EmployeeCount ,main = "Impact of EmployeeCount on Attrition", col="seagreen1")
+plot(Employeedetails$Attrition,Employeedetails$EmployeeNumber, main = "Impact of EmployeeNumber on Attrition",col="hotpink")
+plot(Employeedetails$Attrition,Employeedetails$EnvironmentSatisfaction ,main = "Impact of EnvironmentSatisfaction on Attrition", col="lightgoldenrod")
+plot(Employeedetails$Attrition,Employeedetails$Gender ,main = "Impact of Gender on Attrition", col="khaki1")
+plot(Employeedetails$Attrition,Employeedetails$HourlyRate , main = "Impact of HourlyRate on Attrition",col="dodgerblue")
+plot(Employeedetails$Attrition,Employeedetails$JobInvolvement ,main = "Impact of JobInvolvement on Attrition", col="lightgoldenrod")
+plot(Employeedetails$Attrition,Employeedetails$JobLevel , main = "Impact of JobLevel on Attrition",col="dodgerblue")
+plot(Employeedetails$Attrition,Employeedetails$JobRole , main = "Impact of JobRole on Attrition",col="seagreen1")
+plot(Employeedetails$Attrition,Employeedetails$JobSatisfaction , main = "Impact of JobSatisfaction on Attrition",col="lightgoldenrod")
+plot(Employeedetails$Attrition,Employeedetails$MaritalStatus ,main = "Impact of MaritalStatus on Attrition", col="seagreen1")
+plot(Employeedetails$Attrition,Employeedetails$MonthlyIncome ,main = "Impact of MonthlyIncome on Attrition", col="hotpink")
+plot(Employeedetails$Attrition,Employeedetails$MonthlyRate ,main = "Impact of MonthlyRate on Attrition", col="lightgoldenrod")
+plot(Employeedetails$Attrition,Employeedetails$NumCompaniesWorked ,main = "Impact of NumCompaniesWorked on Attrition", col="dodgerblue")
+plot(Employeedetails$Attrition,Employeedetails$Over18 ,main = "Impact of Over18 on Attrition", col="peru")
+plot(Employeedetails$Attrition,Employeedetails$OverTime ,main = "Impact of OverTime on Attrition", col="lightgoldenrod")
+plot(Employeedetails$Attrition,Employeedetails$PercentSalaryHike ,main = "Impact of PercentSalaryHike on Attrition", col="hotpink")
+plot(Employeedetails$Attrition,Employeedetails$PerformanceRating,main = "Impact of PerformanceRating on Attrition", col="khaki1")
+plot(Employeedetails$Attrition,Employeedetails$RelationshipSatisfaction ,main = "Impact of RelationshipSatisfaction on Attrition", col="green")
+plot(Employeedetails$Attrition,Employeedetails$StandardHours,main = "Impact of StandardHours on Attrition", col="red")
+plot(Employeedetails$Attrition,Employeedetails$StockOptionLevel ,main = "Impact of StockOptionLevel on Attrition", col="dodgerblue")
+plot(Employeedetails$Attrition,Employeedetails$TotalWorkingYears ,main = "Impact of TotalWorkingYears on Attrition", col="yellow")
+plot(Employeedetails$Attrition,Employeedetails$TrainingTimesLastYear ,main = "Impact of TrainingTimesLastYear on Attrition", col="lightgoldenrod")
+plot(Employeedetails$Attrition,Employeedetails$WorkLifeBalance ,main = "Impact of WorkLifeBalance on Attrition", col="hotpink")
+plot(Employeedetails$Attrition,Employeedetails$YearsAtCompany ,main = "Impact of YearsAtCompany on Attrition", col="seagreen1")
+plot(Employeedetails$Attrition,Employeedetails$YearsInCurrentRole,main = "Impact of YearsInCurrentRole on Attrition", col="hotpink")
+plot(Employeedetails$Attrition,Employeedetails$YearsSinceLastPromotion ,main = "Impact of YearsSinceLastPromotion on Attrition", col="lightgoldenrod")
+plot(Employeedetails$Attrition,Employeedetails$YearsWithCurrManager ,main = "Impact of YearsWithCurrManager on Attrition", col="khaki1")
+```
+```{r}
+#5.	Draw a multivariate graph for all the variables
+library(factoextra)
+library(cluster)
+Employeedetails[] <- lapply(Employeedetails, function(x) as.numeric(x))
+res.dist <- get_dist(Employeedetails, stand = TRUE, method = "euclidean")
+fviz_dist(res.dist, 
+   gradient = list(low = "#00AFBB", mid = "white", high = "#FC4E07"))
+```
+```{r}
+#6.	Apply PCA on this dataset after removing categorical variables
+Employeedetailss=Employeedetails
+#Employeedetailss[] <- lapply(Employeedetailss, function(x) as.numeric(x))
+Employeedetailss[,-which(sapply(Employeedetailss, class) == "factor")]
+dt = sort(sample(nrow(Employeedetailss), nrow(Employeedetailss)*.7))
+trainEmployeedetails<-Employeedetailss[dt,]
+testEmployeedetails<-Employeedetailss[-dt,]
+
+EmployeedetailsPCA<-princomp(testEmployeedetails)
+names(EmployeedetailsPCA)
+EmployeedetailsPCA
+biplot(EmployeedetailsPCA,scale = 0)
+message=FALSE
+```
+```{r}
+#7.	After applying PCA, draw inferences from the Principal Components generated using appropriate plots. Describe your inferences
+
+#----------Scree plot example-----------
+
+pr_var<-(EmployeedetailsPCA$sdev)**2
+
+#check to see if all the numeric variables
+
+str(EmployeedetailsPCA)
+
+#compute variance
+
+#variance of first 10 components
+pr_var[1:10]
+
+#Aim of PCA to find the components which explain the maximum variance 
+#compute the proportion of variance explained by each component.
+rot_var<-pr_var/sum(pr_var)
+
+rot_var[1:10]
+
+#plot the scree plotto pick the PCAs which can give maximum variance
+
+plot(rot_var,xlab = "price Components",ylab = "Proportion of variance explained",type = "b",main = "Scree Plot")
+
+# -----------cumulative scree plot ---------------------------------------------------
+
+plot(cumsum(rot_var),xlab = "price Components",ylab = "cumulative Proportion of variance explained",type = "b",main="Cumulative Scree Plot")
+
+
+# -----------score plot --------------------------------------------------------------
+
+plot(EmployeedetailsPCA$scores[,1],EmployeedetailsPCA$scores[,2],main="score plot")
+
+
+```
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
